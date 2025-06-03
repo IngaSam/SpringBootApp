@@ -30,4 +30,12 @@ public class UserService {
         user.setAge(Period.between(user.getBirth(), LocalDate.now()).getYears()); //подсчет возраста
         return userRepository.save(user);
     }
+
+    public void delete(Long id) {
+        Optional<User> optionalUser=userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            throw new IllegalStateException("пользователя с таким id:"+id+" не существует");
+        }
+        userRepository.deleteById(id);
+    }
 }

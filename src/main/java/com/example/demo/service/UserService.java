@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.repository.User;
 import com.example.demo.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -38,7 +39,7 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
-
+    @Transactional //атомарность
     public void update(Long id, String email, String name) {
         Optional<User> optionalUser=userRepository.findById(id);
         if(optionalUser.isEmpty()){
@@ -50,7 +51,7 @@ public class UserService {
             if(foundByEmail.isPresent()){
                 throw new IllegalArgumentException("Пользователь с таким имейлом уже существует");
             }
-            user.setEmail(email);
+            // user.setEmail(email); //убираем так как выполняется всё атомарно
         }
         if(name!=null && !name.equals(user.getName())){
             user.setName(name);

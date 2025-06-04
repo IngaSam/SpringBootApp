@@ -33,9 +33,28 @@ public class UserService {
 
     public void delete(Long id) {
         Optional<User> optionalUser=userRepository.findById(id);
-        if(optionalUser.isPresent()){
+        if(optionalUser.isEmpty()){
             throw new IllegalStateException("пользователя с таким id:"+id+" не существует");
         }
         userRepository.deleteById(id);
+    }
+
+    public void update(Long id, String email, String name) {
+        Optional<User> optionalUser=userRepository.findById(id);
+        if(optionalUser.isEmpty()){
+            throw new IllegalStateException("пользователя с таким id:"+id+" не существует");
+        }
+        User user=optionalUser.get();
+        if(email != null && !email.equals(user.getEmail())){
+            Optional <User> foundByEmail=userRepository.findByEmail(email);
+            if(foundByEmail.isPresent()){
+                throw new IllegalArgumentException("Пользователь с таким имейлом уже существует");
+            }
+            user.setEmail(email);
+        }
+        if(name!=null && !name.equals(user.getName())){
+            user.setName(name);
+        }
+        userRepository.save(user);
     }
 }

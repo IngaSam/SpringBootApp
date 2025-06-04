@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//import static com.sun.beans.introspect.PropertyInfo.Name.required;
+
 @RestController
 @RequestMapping(path ="api/users")
 public class UserController {
@@ -27,6 +29,14 @@ public class UserController {
     @DeleteMapping(path="{id}")
     public void delete(@PathVariable(name="id") Long id){
         userService.delete(id);
+    }
+    @PutMapping(path="{id}")
+    public void update(
+            @PathVariable Long id,
+            @RequestParam(required = false)String email,
+            @RequestParam(required =false) String name
+    ){
+        userService.update(id, email,name);
     }
 
 }
